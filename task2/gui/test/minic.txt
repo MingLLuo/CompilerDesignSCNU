@@ -1,0 +1,36 @@
+keywords: else if  int  float double return void  do while
+symbols:  _  + - * / % <  <= > >= ==  !=  =  ; , ( ) [ ] { }  //
+comment: //
+identifier: (_|l)(_|l|d)*
+number: dd*(.dd*)?
+
+rules:
+program-> definition-list
+definition-list-> definition-list definition | definition
+definition-> variable-definition | function-definition
+variable-definition-> type-indicator identifier ;|type-indicator identifier[number];
+type-indicator-> int | float | double|void
+function-definition-> type-indicator ID（parameters）compound-stmt
+parameters->parameter-list | void
+parameter-list->parameter-list, parameter | parameter
+parameter-> type-indicator identifier | type-indicator identifier[ ]
+compound-stmt-> { local-definitions statement-list }
+local-definitions-> local-definitions variable-definition |empty
+statement-list-> statement-list statement | empty
+statement->expression-stmt | compound-stmt | condition-stmt|dowhile-stmt | return-stmt
+expression-stmt-> expression ; | ;
+condition-stmt-> if(expression) statement |if（expression）statement else statement
+dowhile-stmt->do statement while ( expression) ;
+return-stmt->return ;| return expression ;
+expression-> variable=expression | simple-expression
+variable->identifier |identifier[expression]
+simple-expression->additive-expression relop additive-expression|additive-expression
+relop-><=|<|>|>=|==|!=
+additive-expression->additive-expression addop term | term
+addop->+|-
+term->term mulop factor | factor
+mulop->*|/|%
+factor->(expression )| variable | call | number
+call->identifier(arguments)
+arguments->argument-list | empty
+argument-list->argument-list,expression | expression

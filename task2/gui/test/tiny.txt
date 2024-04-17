@@ -1,13 +1,13 @@
 keywords: if then else end repeat until read write
-symbols:  + - * / % < <> <= >= > = { } ; :=
+symbols:  + - * / % < <> <= >= > = { } ; := ( )
 lcomment: {
 rcomment: }
 identifier: (_|l)(_|l|d)*
 number: dd*(.dd*)?
 
-
+rules:
 program->stmt-sequence
-stmt-sequence->stmt-sequence ;statement|statement
+stmt-sequence->stmt-sequence ; statement|statement
 statement->if-stmt|repeat-stmt|assign-stmt|read-stmt|write-stmt
 if-stmt->if exp then stmt-sequence end|if exp then stmt-sequence else stmt-sequence end
 repeat-stmt->repeat stmt-sequence until exp
