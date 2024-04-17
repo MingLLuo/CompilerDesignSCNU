@@ -1,0 +1,23 @@
+keywords: if then else end repeat until read write
+symbols:  + - * / % < <> <= >= > = { } ; :=
+lcomment: {
+rcomment: }
+identifier: (_|l)(_|l|d)*
+number: dd*(.dd*)?
+
+
+program->stmt-sequence
+stmt-sequence->stmt-sequence ;statement|statement
+statement->if-stmt|repeat-stmt|assign-stmt|read-stmt|write-stmt
+if-stmt->if exp then stmt-sequence end|if exp then stmt-sequence else stmt-sequence end
+repeat-stmt->repeat stmt-sequence until exp
+assign-stmt->identifier := exp
+read-stmt->read identifier
+write-stmt->write exp
+exp->simple-exp comparison-op simple-exp |simple-exp
+comparison-op-><|=|<=|<>|>=|>
+simple-exp->simple-exp addop term |term 
+addop->+|-
+term->term mulop factor|factor 
+mulop->*|/|%
+factor->(exp)|number|identifier

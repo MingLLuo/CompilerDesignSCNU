@@ -1,0 +1,5 @@
+keywords: else if  int  float double return void  do while
+symbols:  _  + - * / % <  <= > >= ==  !=  =  ; , ( ) [ ] { }  //
+comment: //
+identifier: (_|l)(_|l|d)*
+number: dd*(.dd*)?

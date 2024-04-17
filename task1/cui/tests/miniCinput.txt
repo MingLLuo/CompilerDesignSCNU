@@ -1,0 +1,30 @@
+// Program to calculate the factorial of a number and check some conditions
+
+// Variable definitions
+int number;
+double result;
+
+// Function to calculate factorial
+int factorial( int n ) {
+    int result = 1;
+    while (n > 1) {
+        result = result * n;
+        n = n - 1;
+    }
+    return result;
+}
+
+// Main function
+int main( void ) {
+    number = 5;
+    result = factorial(number);
+
+    // Print factorial result
+    if (result > 100) {
+        return 1;
+    } else if (result < 50) {
+        return -1;
+    } else {
+        return 0;
+    }
+}

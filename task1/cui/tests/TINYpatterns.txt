@@ -1,0 +1,6 @@
+keywords: if then else end repeat until read write
+symbols:  + - * / % < <> <= >= > = { } ; := ( )
+lcomment: {
+rcomment: }
+identifier: (_|l)(_|l|d)*
+number: dd*(.dd*)?
