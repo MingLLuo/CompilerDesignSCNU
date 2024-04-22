@@ -1,6 +1,10 @@
-//
-// Created by MingLLuo on 2023/12/6.
-//
+/*
+ * File: grammar.h
+ * Project: Parser
+ * Author: MingLLuo
+ * Usage: Define the Grammar class
+ * Created on December 6, 2023
+ */
 #include <iostream>
 
 #include "pattern.h"

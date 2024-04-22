@@ -1,8 +1,16 @@
-//
-// Created by MingLLuo on 2023/12/6.
-//
-
+/*
+ * File: lr0Parser.cpp
+ * Project: Parser
+ * Author: MingLLuo
+ * Usage: Define the LR0Parser class
+ * Created on December 6, 2023
+ */
 #include "lr0Parser.h"
+
+/**
+ * @brief Add the first production to the grammar
+ * @param g The grammar
+ */
 void LR0Parser::addFirstProduction(const Grammar &g) {
   std::string start;
   start = "Start";
@@ -13,6 +21,10 @@ void LR0Parser::addFirstProduction(const Grammar &g) {
   productions.push_back(startProduction);
 }
 
+/**
+ * @brief Generate the productions for the grammar
+ * @param g The grammar
+ */
 void LR0Parser::genSingleProductions(const Grammar &g) {
   std::set<SingleProduction> checkSet;
   for (auto &p : g.productions) {
@@ -29,43 +41,10 @@ void LR0Parser::genSingleProductions(const Grammar &g) {
   }
 }
 
-// void LR0Parser::constructItemSet(std::string start) {
-//   ItemSet initialSet;
-//   std::vector<std::string> rhs;
-//   rhs.push_back("program");
-//   LR0Item item = {start, rhs, 0, 0};
-//   initialSet.items.insert(item);
-
-//   closure(initialSet);
-//   itemSets.push_back(initialSet);
-//   flush();
-//   std::map<ItemSet, int> itemSetMap;
-//   itemSetMap[initialSet] = fresh();
-//   // start stateIndex will be 0
-
-//   bool changed = true;
-//   while (changed) {
-//     changed = false;
-//     for (int i = 0; i < itemSets.size(); i++) {
-//       for (auto symbol : symbols) {
-//         auto nextSet = gotoSet(itemSets[i], symbol);
-//         if (nextSet.items.empty()) {
-//           // invalid set
-//           continue;
-//         }
-//         if (itemSetMap.find(nextSet) == itemSetMap.end()) {
-//           auto index = fresh();
-//           itemSetMap[nextSet] = index;
-//           nextSet.stateIndex = index;
-//           itemSets.push_back(nextSet);
-//           changed = true;
-//         }
-//         transitions[i][symbol] = itemSetMap[nextSet];
-//       }
-//     }
-//   }
-// }
-
+/**
+ * @brief Construct the item set for the grammar
+ * @param start The start symbol
+ */
 void LR0Parser::constructItemSet(std::string start) {
   ItemSet initialSet;
   std::vector<std::string> rhs;
@@ -102,6 +81,10 @@ void LR0Parser::constructItemSet(std::string start) {
   }
 }
 
+/**
+ * @brief Compute the closure of the item set
+ * @param s The item set
+ */
 void LR0Parser::closure(ItemSet &s) {
   bool changed = true;
   while (changed) {
@@ -129,6 +112,12 @@ void LR0Parser::closure(ItemSet &s) {
   }
 }
 
+/**
+ * @brief Compute the goto set for the item set
+ * @param s The item set
+ * @param symbol The symbol to process
+ * @return The next item set
+ */
 ItemSet LR0Parser::gotoSet(ItemSet &s, std::string symbol) {
   ItemSet nextSet;
   for (const auto &item : s.items) {
@@ -159,6 +148,9 @@ ItemSet LR0Parser::gotoSet(ItemSet &s, std::string symbol) {
   return nextSet;
 }
 
+/**
+ * @brief Print the item sets
+ */
 void LR0Parser::printItemSets() {
   std::cout << "ItemSet: " << std::endl;
   for (auto &itemSet : itemSets) {
@@ -175,6 +167,11 @@ void LR0Parser::printItemSets() {
   }
 }
 
+/**
+ * @brief Convert a string token to a Token object
+ * @param tokenStr The string token
+ * @return The Token object
+ */
 Token LR0Parser::stringToToken(std::string tokenStr) {
   // skip string Token:
   tokenStr = tokenStr.substr(7);
@@ -193,6 +190,11 @@ Token LR0Parser::stringToToken(std::string tokenStr) {
   }
 }
 
+/**
+ * @brief Parse the input tokens
+ * @param tokens The input tokens
+ * @return The parse tree
+ */
 std::shared_ptr<TreeNode> LR0Parser::parse(std::vector<std::string> tokens) {
   std::vector<Token> tokenList = {};
   // tokenList.insert(tokenList.begin(), Token{"program", ""});
@@ -330,6 +332,13 @@ std::shared_ptr<TreeNode> LR0Parser::parse(std::vector<std::string> tokens) {
   }
 }
 
+/**
+ * @brief Print the parse tree
+ * @param root The root of the parse tree
+ * @param depth The depth of the tree
+ * @param prefix The prefix for the tree
+ * @return The string representation of the tree
+ */
 std::string LR0Parser::treeNodePrint(std::shared_ptr<TreeNode> root, int depth,
                                      std::string prefix) {
   std::stringstream ss;

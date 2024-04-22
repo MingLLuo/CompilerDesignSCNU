@@ -1,8 +1,15 @@
-//
-// Created by MingLLuo on 2023/12/6.
-//
-
+/*
+ * File: slr1Parser.cpp
+ * Project: Parser
+ * Author: MingLLuo
+ * Usage: Define the SLR1Parser class
+ * Created on December 6, 2023
+ */
 #include "slr1Parser.h"
+
+/**
+ * @brief Print the item sets
+ */
 void SLR1Parser::printItemSets() {
   if (checkValid() != 0) {
     std::cout << "invalid" << std::endl;
@@ -30,6 +37,10 @@ void SLR1Parser::printItemSets() {
   }
 }
 
+/**
+ * @brief Check if the grammar is valid
+ * @return 0 if valid, 1 if shift-reduce conflict, 2 if reduce-reduce conflict
+ */
 int SLR1Parser::checkValid() {
   for (auto &itemSet : itemSets) {
     for (auto item : itemSet.items) {

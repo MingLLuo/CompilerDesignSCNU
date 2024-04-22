@@ -1,11 +1,19 @@
-//
-// Created by MingLLuo on 2023/12/6.
-//
+/*
+ * File: grammar.cpp
+ * Project: Parser
+ * Author: MingLLuo
+ * Usage: Define the Grammar class
+ * Created on December 6, 2023
+ */
 
 #include "grammar.h"
 #include <string>
 #include <vector>
 
+/**
+ * @brief Parse the text to get the productions
+ * @param s The input text
+ */
 void Grammar::parseText(const std::string &s) {
   // copy content of s to productions, split by '\n'
   std::vector<std::string> lines;
@@ -59,6 +67,11 @@ void Grammar::parseText(const std::string &s) {
   }
 }
 
+/**
+ * @brief Split the string to tokens
+ * @param s The input string
+ * @return The tokens
+ */
 std::vector<std::string> Grammar::tokensSplit(const std::string &s) {
   std::vector<std::string> tokens;
   std::istringstream iss(s);
@@ -90,6 +103,9 @@ std::vector<std::string> Grammar::tokensSplit(const std::string &s) {
   return tokens;
 }
 
+/**
+ * @brief Parse the rules to get the productions
+ */
 void Grammar::parseRule() {
   // set terminal first
   terminals.insert(pattern.allTokens.begin(), pattern.allTokens.end());
@@ -114,6 +130,9 @@ void Grammar::parseRule() {
   }
 }
 
+/**
+ * @brief Compute the first sets
+ */
 void Grammar::computeFirstSets() {
   // Initialize first sets
   auto &first = this->firstSets;
@@ -149,13 +168,16 @@ void Grammar::computeFirstSets() {
   }
 }
 
+/**
+ * @brief Compute the follow sets
+ */
 void Grammar::computeFollowSets() {
   // Initialize first sets
   auto &follow = this->followSets;
   for (const auto &nt : nonTerminals) {
     follow[nt] = {};
   }
-  
+
   // find lhs is "program"
   for (const auto &prod : productions) {
     if (prod.lhs == "program") {
@@ -187,6 +209,9 @@ void Grammar::computeFollowSets() {
   }
 }
 
+/**
+ * @brief Print the first sets
+ */
 void Grammar::printFirstSets() {
   std::cout << "First sets:" << std::endl;
   for (const auto &[lhs, firstSet] : this->firstSets) {
@@ -204,6 +229,9 @@ void Grammar::printFirstSets() {
   }
 }
 
+/**
+ * @brief Print the follow sets
+ */
 void Grammar::printFollowSets() {
   std::cout << "Follow sets:" << std::endl;
   for (const auto &[lhs, followSet] : this->followSets) {

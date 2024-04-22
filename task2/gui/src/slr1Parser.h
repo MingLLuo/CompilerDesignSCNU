@@ -1,7 +1,10 @@
-//
-// Created by MingLLuo on 2023/12/6.
-//
-
+/*
+ * File: slr1Parser.h
+ * Project: Parser
+ * Author: MingLLuo
+ * Usage: Define the SLR1Parser class
+ * Created on December 6, 2023
+ */
 #ifndef SLRPARSER_SLR1PARSER_H
 #define SLRPARSER_SLR1PARSER_H
 #include "lr0Parser.h"

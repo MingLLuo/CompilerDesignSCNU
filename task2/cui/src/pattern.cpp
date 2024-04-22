@@ -1,5 +1,14 @@
+/*
+ * File: pattern.cpp
+ * Project: Parser
+ * Author: MingLLuo
+ * Usage: Define the Pattern class
+ */
 #include "pattern.h"
 
+/* loadPatterns: read file and call readPatterns
+ * @param filePath: file path
+ */
 void Pattern::loadPatterns(const std::string &filePath) {
   // readfile then readPatterns
   std::ifstream file(filePath);
@@ -11,6 +20,10 @@ void Pattern::loadPatterns(const std::string &filePath) {
   readPatterns(content);
 }
 
+/* readPatterns: read patterns from string, if 'rules' exists, read rules till
+ * EOF
+ * @param s: string
+ */
 void Pattern::readPatterns(std::string s) {
   // split to vector
   std::vector<std::string> lines;
@@ -125,6 +138,9 @@ void Pattern::readPatterns(std::string s) {
   }
 }
 
+/* patternToString: return pattern in string format
+ * @return: string
+ */
 std::string Pattern::patternToString() const {
   std::string result;
   result += "Keywords: ";
