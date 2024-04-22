@@ -138,6 +138,9 @@ void Pattern::readPatterns(std::string s) {
     allTokens.insert(std::string(1, c));
   }
 }
+
+/* printPatterns: print patterns
+ */
 void Pattern::printPatterns() const {
   std::cout << "Keywords: ";
   for (const auto &keyword : keywords) {
