@@ -1,3 +1,9 @@
+/*
+ * File: dfa.h
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the DFA class
+ */
 #ifndef LEXICAL_DFA_H
 #define LEXICAL_DFA_H
 

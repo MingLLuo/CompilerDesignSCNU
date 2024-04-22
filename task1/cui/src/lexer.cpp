@@ -1,5 +1,12 @@
+/*
+ * File: lexer.cpp
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the Lexer class
+ */
 #include "lexer.h"
 
+/* lexerInit: initialize lexer */
 void Lexer::lexerInit() {
   std::vector<std::shared_ptr<RegExp>> keywords, symbols;
   auto keywordNFA = std::make_shared<NFA>();

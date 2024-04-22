@@ -1,3 +1,9 @@
+/*
+ * File: lexer.h
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the Lexer class
+ */
 #ifndef LEXER_H
 #define LEXER_H
 #include "dfa.h"
@@ -6,7 +12,7 @@
 class Lexer {
 public:
   void lexerInit();
-  // Lexer(const std::string &filePath) : pattern(filePath) { lexerInit(); }
+
   Lexer(std::string s, const std::string &filePath) : pattern(s, filePath) {
     lexerInit();
   }

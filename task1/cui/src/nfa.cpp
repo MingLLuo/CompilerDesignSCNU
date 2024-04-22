@@ -1,7 +1,17 @@
+/*
+ * File: nfa.cpp
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the NFA class
+ */
 #include "nfa.h"
 
+/* NFA: constructor */
 NFA::NFA() : start_state(nullptr) { this->symbols.insert(0); }
 
+/* mergeStatesFromNFA: merge states from nfa to this
+ * @param nfa: nfa to merge
+ */
 void NFA::mergeStatesFromNFA(const std::shared_ptr<NFA> &nfa) {
     // move all states of nfa to this, won't copy start state
     for (const auto &state : nfa->states) {
@@ -11,12 +21,19 @@ void NFA::mergeStatesFromNFA(const std::shared_ptr<NFA> &nfa) {
     copySymbols(nfa);
 }
 
+/* copySymbols: copy symbols from nfa to this
+  * @param nfa: nfa to copy
+  */
 void NFA::copySymbols(const std::shared_ptr<NFA> &nfa) {
     for (auto symbol : nfa->symbols) {
         symbols.insert(symbol);
     }
 }
 
+/* copyCleanNFA: copy nfa to this, with or without final states
+ * @param nfa: nfa to copy
+ * @param withFinal: copy final states or not
+ */
 void NFA::copyCleanNFA(const std::shared_ptr<NFA> &nfa, bool withFinal) {
     copySymbols(nfa);
     flush();
@@ -49,6 +66,9 @@ void NFA::copyCleanNFA(const std::shared_ptr<NFA> &nfa, bool withFinal) {
     start_state = state_map[nfa->start_state];
 }
 
+/* setFinalStatus: set final status for all final states
+ * @param str: final status
+ */
 void NFA::setFinalStatus(const std::string &str) const {
     for (const auto &state : states) {
         if (state->is_final) {
@@ -57,6 +77,10 @@ void NFA::setFinalStatus(const std::string &str) const {
     }
 }
 
+/* addETransitions: add epsilon transitions from src_list to dest
+ * @param src_list: source states
+ * @param dest: destination state
+ */
 void addETransitions(const std::vector<std::shared_ptr<NFAState>> &src_list,
                      const std::shared_ptr<NFAState> &dest) {
     for (const auto &state : src_list) {
@@ -65,6 +89,11 @@ void addETransitions(const std::vector<std::shared_ptr<NFAState>> &src_list,
     }
 }
 
+/* concatNFAs: concatenate two NFAs
+ * @param nfa1: first NFA
+ * @param nfa2: second NFA
+ * @return: concatenated NFA
+ */
 std::shared_ptr<NFA> concatNFAs(const std::shared_ptr<NFA> &nfa1,
                                 const std::shared_ptr<NFA> &nfa2) {
     auto nfaConcat = std::make_shared<NFA>();
@@ -87,6 +116,11 @@ std::shared_ptr<NFA> concatNFAs(const std::shared_ptr<NFA> &nfa1,
     return nfaConcat;
 }
 
+/* unionNFAs: union two NFAs
+ * @param nfa1: first NFA
+ * @param nfa2: second NFA
+ * @return: union NFA
+ */
 std::shared_ptr<NFA> unionNFAs(const std::shared_ptr<NFA> &nfa1,
                                const std::shared_ptr<NFA> &nfa2) {
     auto nfaUnion = std::make_shared<NFA>();
@@ -108,6 +142,10 @@ std::shared_ptr<NFA> unionNFAs(const std::shared_ptr<NFA> &nfa1,
     return nfaUnion;
 }
 
+/* starNFA: create a star NFA
+ * @param nfa: NFA to create star
+ * @return: star NFA
+ */
 std::shared_ptr<NFA> starNFA(const std::shared_ptr<NFA> &nfa) {
     auto nfaStar = std::make_shared<NFA>();
 
@@ -145,6 +183,10 @@ std::shared_ptr<NFA> plusNFA(const std::shared_ptr<NFA> &nfa) {
     return nfaPlus;
 }
 
+/* quesNFA: create a question mark NFA
+ * @param nfa: NFA to create question mark
+ * @return: question mark NFA
+ */
 std::shared_ptr<NFA> quesNFA(const std::shared_ptr<NFA> &nfa) {
     auto nfaQues = std::make_shared<NFA>();
 
@@ -168,6 +210,9 @@ std::shared_ptr<NFA> quesNFA(const std::shared_ptr<NFA> &nfa) {
     return nfaQues;
 }
 
+/* printNFA: print NFA
+ * @param nfa: NFA to print
+ */
 void printNFA(const NFA &nfa) {
     std::cout << "NFA States:\n";
     std::cout << "NFA Start State:" << nfa.start_state->id << '\n';

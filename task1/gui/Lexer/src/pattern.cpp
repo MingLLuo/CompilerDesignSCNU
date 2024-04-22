@@ -1,17 +1,24 @@
 #include "pattern.h"
 #include <string>
 
+/* loadPatterns: read file and call readPatterns
+ * @param filePath: file path
+ */
 void Pattern::loadPatterns(const std::string &filePath) {
   // readfile then readPatterns
   std::ifstream file(filePath);
   std::string content;
   std::string line;
-  while(std::getline(file, line)) {
+  while (std::getline(file, line)) {
     content += line + "\n";
   }
   readPatterns(content);
 }
 
+/* readPatterns: read patterns from string, if 'rules' exists, read rules till
+ * EOF
+ * @param s: string
+ */
 void Pattern::readPatterns(std::string s) {
   // split to vector
   std::vector<std::string> lines;
@@ -23,7 +30,9 @@ void Pattern::readPatterns(std::string s) {
 
   int keywordsCount = 1;
   int symbolsCount = 1;
-  for (const auto &line : lines) {
+  // for (const auto &line : lines) {
+  for (int i = 0; i < lines.size(); i++) {
+    auto line = lines[i];
     std::istringstream iss(line);
     std::string type, pattern;
     while (std::getline(iss, type, ' ') && std::getline(iss, pattern)) {
@@ -69,8 +78,12 @@ void Pattern::readPatterns(std::string s) {
     if (type == "rules:") {
       // read to end of file
       std::string rule;
-      while (std::getline(iss, rule)) {
-        std::istringstream iss(rule);
+      while (i < lines.size()) {
+        i++;
+        rule = lines[i];
+        if (rule.empty()) {
+          continue;
+        }
         std::string key, value;
         // key->value , split by '->'
         key = rule.substr(0,
@@ -102,184 +115,218 @@ void Pattern::readPatterns(std::string s) {
       letters.push_back(c);
     }
   }
+
+  for (const auto &keyword : keywords) {
+    allTokens.insert(keyword.first);
+  }
+  for (const auto &symbol : specialSymbols) {
+    allTokens.insert(symbol.first);
+  }
+  allTokens.insert(lcomment);
+  allTokens.insert(rcomment);
+  allTokens.insert(comment);
+  for (char c : letters) {
+    allTokens.insert(std::string(1, c));
+  }
+  for (char c : digits) {
+    allTokens.insert(std::string(1, c));
+  }
 }
-  void Pattern::printPatterns() const {
-    std::cout << "Keywords: ";
-    for (const auto &keyword : keywords) {
-      std::cout << keyword.first << " ";
+void Pattern::printPatterns() const {
+  std::cout << "Keywords: ";
+  for (const auto &keyword : keywords) {
+    std::cout << keyword.first << " ";
+  }
+  std::cout << std::endl;
+
+  std::cout << "Special Symbols: ";
+  for (const auto &symbol : specialSymbols) {
+    std::cout << symbol.first << " ";
+  }
+  std::cout << std::endl;
+
+  std::cout << "Left Comment: " << lcomment << std::endl;
+  std::cout << "Right Comment: " << rcomment << std::endl;
+
+  std::cout << "Rules: " << std::endl;
+  for (const auto &rule : rules) {
+    std::cout << rule.first << "->";
+    for (const auto &subRule : rule.second) {
+      std::cout << subRule << "|";
     }
     std::cout << std::endl;
+  }
+}
 
-    std::cout << "Special Symbols: ";
-    for (const auto &symbol : specialSymbols) {
-      std::cout << symbol.first << " ";
+/* patternToString: return pattern in string format
+ * @return: string
+ */
+std::string Pattern::patternToString() const {
+  std::string result;
+  result += "Keywords: ";
+  for (const auto &keyword : keywords) {
+    result += keyword.first + " ";
+  }
+  result += "\n";
+
+  result += "Special Symbols: ";
+  for (const auto &symbol : specialSymbols) {
+    result += symbol.first + " ";
+  }
+  result += "\n";
+
+  result += "Left Comment: " + lcomment + "\n";
+  result += "Right Comment: " + rcomment + "\n";
+
+  result += "Rules: \n";
+  for (const auto &rule : rules) {
+    result += rule.first + "->";
+    for (const auto &subRule : rule.second) {
+      result += subRule + "|";
     }
-    std::cout << std::endl;
-
-    std::cout << "Left Comment: " << lcomment << std::endl;
-    std::cout << "Right Comment: " << rcomment << std::endl;
-
-    std::cout << "Rules: " << std::endl;
-    for (const auto &rule : rules) {
-      std::cout << rule.first << "->";
-      for (const auto &subRule : rule.second) {
-        std::cout << subRule << "|";
-      }
-      std::cout << std::endl;
-    }
+    result += "\n";
   }
 
-  std::string Pattern::patternToString() const {
-    std::string result;
-    result += "Keywords: ";
-    for (const auto &keyword : keywords) {
-      result += keyword.first + " ";
-    }
-    result += "\n";
+  result += "Letters: ";
+  for (char c : letters) {
+    result += c;
+  }
+  result += "\n";
 
-    result += "Special Symbols: ";
-    for (const auto &symbol : specialSymbols) {
-      result += symbol.first + " ";
-    }
-    result += "\n";
+  result += "Digits: ";
+  for (char c : digits) {
+    result += c;
+  }
+  result += "\n";
 
-    result += "Left Comment: " + lcomment + "\n";
-    result += "Right Comment: " + rcomment + "\n";
+  // return table, with format
+  result += "Lexeme\t\tToken\n";
+  int padding = 16;
+  // sort by token.second
+  std::map<int, std::string> tokenToLexeme;
+  for (const auto &keyword : keywords) {
+    tokenToLexeme[keyword.second] = keyword.first;
+  }
+  for (const auto &symbol : specialSymbols) {
+    tokenToLexeme[symbol.second] = symbol.first;
+  }
+  for (const auto &token : tokenToLexeme) {
+    result += token.second + std::string(padding - token.second.size(), ' ') +
+              std::to_string(token.first) + "\n";
+  }
+  return result;
+}
 
-    result += "Rules: \n";
-    for (const auto &rule : rules) {
-      result += rule.first + "->";
-      for (const auto &subRule : rule.second) {
-        result += subRule + "|";
+std::vector<std::string> Pattern::keywordsToRegScanner() const {
+  std::vector<std::string> result;
+  for (const auto &keyword : keywords) {
+    result.push_back(keyword.first);
+  }
+  return result;
+}
+
+std::vector<std::string> Pattern::specialSymbolsToRegScanner() const {
+  std::vector<std::string> result;
+  for (const auto &symbol : specialSymbols) {
+    result.push_back(symbol.first);
+  }
+  return result;
+}
+
+/* vectorToRegex: convert vector to regex
+ * @param vec: vector
+ * @return: string
+ */
+std::string vectorToRegex(const std::vector<char> &vec) {
+  std::string result;
+  if (vec.size() > 1) {
+    for (int i = 0; i < vec.size(); i++) {
+      result += vec[i];
+      if (i != vec.size() - 1) {
+        result += "|";
       }
-      result += "\n";
     }
+  } else {
+    result = vec[0];
+  }
+  return result;
+}
 
-    result += "Letters: ";
-    for (char c : letters) {
+/* idRegexToRegScanner: convert idRegex to regex
+ * @return: string
+ */
+std::string Pattern::idRegexToRegScanner() const {
+  // make l -> (letters| letters ...), d -> (digits| digits ...)
+  std::string result;
+  std::string letters = vectorToRegex(this->letters);
+  std::string digits = vectorToRegex(this->digits);
+  // change idRegex's l and d to letters and digits
+  for (char c : idRegex) {
+    if (c == 'l') {
+      result += letters;
+    } else if (c == 'd') {
+      result += digits;
+    } else {
       result += c;
     }
-    result += "\n";
+  }
+  return result;
+}
 
-    result += "Digits: ";
-    for (char c : digits) {
+/* numRegexToRegScanner: convert numRegex to regex
+ * @return: string
+ */
+std::string Pattern::numRegexToRegScanner() const {
+  std::string result;
+  std::string letters = vectorToRegex(this->letters);
+  std::string digits = vectorToRegex(this->digits);
+  for (char c : numRegex) {
+    if (c == 'l') {
+      result += letters;
+    } else if (c == 'd') {
+      result += digits;
+    } else {
       result += c;
     }
-    result += "\n";
-
-    // return table, with format
-    result += "Lexeme\t\tToken\n";
-    int padding = 16;
-    // sort by token.second
-    std::map<int, std::string> tokenToLexeme;
-    for (const auto &keyword : keywords) {
-      tokenToLexeme[keyword.second] = keyword.first;
-    }
-    for (const auto &symbol : specialSymbols) {
-      tokenToLexeme[symbol.second] = symbol.first;
-    }
-    for (const auto &token : tokenToLexeme) {
-      result += token.second + std::string(padding - token.second.size(), ' ') +
-                std::to_string(token.first) + "\n";
-    }
-    return result;
   }
+  return result;
+}
 
-  std::vector<std::string> Pattern::keywordsToRegScanner() const {
-    std::vector<std::string> result;
-    for (const auto &keyword : keywords) {
-      result.push_back(keyword.first);
-    }
-    return result;
-  }
+/* isTypeChar: check if char is type char
+ * @param c: char
+ * @return: bool
+ */
+bool isspace(char c) { return c == ' ' || c == '\t' || c == '\n' || c == '\r'; }
 
-  std::vector<std::string> Pattern::specialSymbolsToRegScanner() const {
-    std::vector<std::string> result;
-    for (const auto &symbol : specialSymbols) {
-      result.push_back(symbol.first);
-    }
-    return result;
-  }
-
-  std::string vectorToRegex(const std::vector<char> &vec) {
-    std::string result;
-    if (vec.size() > 1) {
-      for (int i = 0; i < vec.size(); i++) {
-        result += vec[i];
-        if (i != vec.size() - 1) {
-          result += "|";
+/* isTypeChar: check if char is type char
+ * @param c: char
+ * @return: bool
+ */
+std::string Pattern::commentRegexToRegScanner() const {
+  std::string result;
+  // make all char except left and right comment to vector of char (or comment)
+  std::vector<char> all;
+  for (int i = 0; i < 128; i++) {
+    if (comment == "") {
+      if (i != lcomment[0] && i != rcomment[0]) {
+        if ((std::isprint(i) || isspace(i)) && !isTypeChar(i)) {
+          all.push_back(i);
         }
       }
     } else {
-      result = vec[0];
-    }
-    return result;
-  }
-
-  std::string Pattern::idRegexToRegScanner() const {
-    // make l -> (letters| letters ...), d -> (digits| digits ...)
-    std::string result;
-    std::string letters = vectorToRegex(this->letters);
-    std::string digits = vectorToRegex(this->digits);
-    // change idRegex's l and d to letters and digits
-    for (char c : idRegex) {
-      if (c == 'l') {
-        result += letters;
-      } else if (c == 'd') {
-        result += digits;
-      } else {
-        result += c;
-      }
-    }
-    return result;
-  }
-  std::string Pattern::numRegexToRegScanner() const {
-    std::string result;
-    std::string letters = vectorToRegex(this->letters);
-    std::string digits = vectorToRegex(this->digits);
-    for (char c : numRegex) {
-      if (c == 'l') {
-        result += letters;
-      } else if (c == 'd') {
-        result += digits;
-      } else {
-        result += c;
-      }
-    }
-    return result;
-  }
-
-  bool isspace(char c) {
-    return c == ' ' || c == '\t' || c == '\n' || c == '\r';
-  }
-
-  std::string Pattern::commentRegexToRegScanner() const {
-    std::string result;
-    // make all char except left and right comment to vector
-    // std::string letters = vectorToRegex(this->letters);
-    // std::string digits = vectorToRegex(this->digits);
-    // std::string space = "( |\t|\n|\r)";
-    std::vector<char> all;
-    for (int i = 0; i < 128; i++) {
-      if (comment == "") {
-        if (i != lcomment[0] && i != rcomment[0]) {
-          if ((std::isprint(i) || isspace(i)) && !isTypeChar(i)) {
-            all.push_back(i);
-          }
-        }
-      } else {
-        if (i != lcomment[0] && i != rcomment[0]) {
-          if ((std::isprint(i) || isspace(i)) && !isTypeChar(i) && i != '\n') {
-            all.push_back(i);
-          }
+      // if comment is not empty, add all char except comment
+      if (comment.find(i) == std::string::npos) {
+        if ((std::isprint(i) || isspace(i)) && !isTypeChar(i) && i != '\n') {
+          all.push_back(i);
         }
       }
     }
-    // std::string all = letters + "|" + digits + "|" + space;
-    if (lcomment == "") {
-      result = comment + vectorToRegex(all) + "*";
-    } else {
-      result = lcomment + vectorToRegex(all) + "*" + rcomment;
-    }
-    return result;
   }
+  // std::string all = letters + "|" + digits + "|" + space;
+  if (lcomment == "") {
+    result = comment + vectorToRegex(all) + "*";
+  } else {
+    result = lcomment + vectorToRegex(all) + "*" + rcomment;
+  }
+  return result;
+}

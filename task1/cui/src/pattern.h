@@ -1,11 +1,16 @@
-
+/*
+ * File: pattern.h
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the Pattern class
+ */
 #ifndef PATTERN_H
 #define PATTERN_H
 #include "regScanner.h"
 #include <fstream>
 #include <map>
-#include <sstream>
 #include <set>
+#include <sstream>
 
 class Pattern {
 public:
@@ -66,23 +71,4 @@ public:
 
   bool isAlphaNumeric(char c) const { return isAlpha(c) || isDigit(c); }
 };
-
-// class Scanner {
-//   public:
-//     Scanner(const std::string &filePath) : pattern(filePath) {}
-
-//     void scan(const std::string &filePath);
-
-//   private:
-//     Pattern pattern;
-//     std::map<std::string, int> lexemes;
-//     std::map<std::string, int> constants;
-//     std::map<std::string, int> identifiers;
-//     std::map<std::string, int> errors;
-
-//     void printLexemes() const;
-//     void printConstants() const;
-//     void printIdentifiers() const;
-//     void printErrors() const;
-// };
 #endif // PATTERN_H

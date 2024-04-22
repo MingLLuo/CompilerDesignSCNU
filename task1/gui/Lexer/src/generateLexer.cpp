@@ -1,5 +1,15 @@
+/*
+ * File: generateLexer.cpp
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the generateLexer function
+ */
 #include "generateLexer.h"
 
+/* charToOut: convert char to string
+ * @param c: char to convert
+ * @return: converted string
+ */
 std::string charToOut(char c) {
   if (c == '\n') {
     return "\\n";
@@ -22,6 +32,10 @@ std::string charToOut(char c) {
   }
 }
 
+/* generateLexer: generate lexer code
+ * @param lexer: lexer object
+ * @return: generated code
+ */
 std::string generateLexer(const Lexer &lexer) {
   std::shared_ptr<DFA> dfa = lexer.finalDFA;
   std::ostringstream code;
@@ -65,8 +79,6 @@ std::string generateLexer(const Lexer &lexer) {
     code << "    currentState = -1; // Invalid transition\n";
     code << "}\n\n";
   }
-  // static std::map<int, std::function<void(char, int&, bool&)>>
-  // stateHandlers;
   code << "static std::map<int, std::function<void(char, int&)>> "
           "stateHandlers = "
           "{\n";
@@ -79,17 +91,6 @@ std::string generateLexer(const Lexer &lexer) {
   code << "    int currentState = " << dfa->start_state->id << ";\n";
   code << "    for (char inputSymbol : input) {\n";
   code << "        if (isspace(inputSymbol)) continue;\n";
-  // code << "        switch (currentState) {\n";
-
-  // for (const auto &state : dfa->dfa_states) {
-  //     code << "            case " << state->id << ":\n";
-  //     code << "                state" << state->id
-  //          << "(inputSymbol, currentState);\n";
-  //     code << "                break;\n";
-  // }
-  // code << "            default:\n";
-  // code << "                return false;\n";
-  // code << "        }\n";
   code << "        if (stateHandlers.find(currentState) != "
           "stateHandlers.end()) {\n";
   code << "            stateHandlers[currentState](inputSymbol, "
@@ -257,6 +258,10 @@ std::string generateLexer(const Lexer &lexer) {
   return code.str();
 }
 
+/* generateLexerToFile: generate lexer code and write to file
+ * @param lexer: lexer object
+ * @param filename: output file name
+ */
 void generateLexerToFile(const Lexer &lexer, const std::string &filename) {
   std::ofstream file(filename);
 

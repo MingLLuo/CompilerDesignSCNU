@@ -1,6 +1,9 @@
 #include "pattern.h"
 #include <string>
 
+/* loadPatterns: read file and call readPatterns
+ * @param filePath: file path
+ */
 void Pattern::loadPatterns(const std::string &filePath) {
   // readfile then readPatterns
   std::ifstream file(filePath);
@@ -12,6 +15,10 @@ void Pattern::loadPatterns(const std::string &filePath) {
   readPatterns(content);
 }
 
+/* readPatterns: read patterns from string, if 'rules' exists, read rules till
+ * EOF
+ * @param s: string
+ */
 void Pattern::readPatterns(std::string s) {
   // split to vector
   std::vector<std::string> lines;
@@ -151,6 +158,9 @@ void Pattern::printPatterns() const {
   }
 }
 
+/* patternToString: return pattern in string format
+ * @return: string
+ */
 std::string Pattern::patternToString() const {
   std::string result;
   result += "Keywords: ";
@@ -223,6 +233,10 @@ std::vector<std::string> Pattern::specialSymbolsToRegScanner() const {
   return result;
 }
 
+/* vectorToRegex: convert vector to regex
+ * @param vec: vector
+ * @return: string
+ */
 std::string vectorToRegex(const std::vector<char> &vec) {
   std::string result;
   if (vec.size() > 1) {
@@ -238,6 +252,9 @@ std::string vectorToRegex(const std::vector<char> &vec) {
   return result;
 }
 
+/* idRegexToRegScanner: convert idRegex to regex
+ * @return: string
+ */
 std::string Pattern::idRegexToRegScanner() const {
   // make l -> (letters| letters ...), d -> (digits| digits ...)
   std::string result;
@@ -255,6 +272,10 @@ std::string Pattern::idRegexToRegScanner() const {
   }
   return result;
 }
+
+/* numRegexToRegScanner: convert numRegex to regex
+ * @return: string
+ */
 std::string Pattern::numRegexToRegScanner() const {
   std::string result;
   std::string letters = vectorToRegex(this->letters);
@@ -271,14 +292,19 @@ std::string Pattern::numRegexToRegScanner() const {
   return result;
 }
 
+/* isTypeChar: check if char is type char
+ * @param c: char
+ * @return: bool
+ */
 bool isspace(char c) { return c == ' ' || c == '\t' || c == '\n' || c == '\r'; }
 
+/* isTypeChar: check if char is type char
+ * @param c: char
+ * @return: bool
+ */
 std::string Pattern::commentRegexToRegScanner() const {
   std::string result;
-  // make all char except left and right comment to vector
-  // std::string letters = vectorToRegex(this->letters);
-  // std::string digits = vectorToRegex(this->digits);
-  // std::string space = "( |\t|\n|\r)";
+  // make all char except left and right comment to vector of char (or comment)
   std::vector<char> all;
   for (int i = 0; i < 128; i++) {
     if (comment == "") {
@@ -288,7 +314,8 @@ std::string Pattern::commentRegexToRegScanner() const {
         }
       }
     } else {
-      if (i != lcomment[0] && i != rcomment[0]) {
+      // if comment is not empty, add all char except comment
+      if (comment.find(i) == std::string::npos) {
         if ((std::isprint(i) || isspace(i)) && !isTypeChar(i) && i != '\n') {
           all.push_back(i);
         }

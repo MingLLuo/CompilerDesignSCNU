@@ -1,3 +1,9 @@
+/*
+ * File: regScanner.cpp
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the Scanner functions
+ */
 #include "regScanner.h"
 
 Token Scanner::getNextTokenFromStr() {

@@ -1,3 +1,9 @@
+/*
+ * File: regExp.cpp
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the RegExp class
+ */
 #include "regExp.h"
 
 std::shared_ptr<RegExp> tokensToRegExp(const std::vector<Token> &tokens) {

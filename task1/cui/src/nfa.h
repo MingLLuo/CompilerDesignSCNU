@@ -1,3 +1,9 @@
+/*
+ * File: nfa.h
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the NFA class
+ */
 #ifndef NFA_H
 #define NFA_H
 #include "util.h"

@@ -1,3 +1,9 @@
+/*
+ * File: regExp.h
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the RegExp class
+ */
 #ifndef LEXICAL_REGEXP_H
 #define LEXICAL_REGEXP_H
 #include "nfa.h"

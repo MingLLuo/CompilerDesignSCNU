@@ -1,5 +1,11 @@
-#ifndef TINY_REGSCANNER_H
-#define TINY_REGSCANNER_H
+/*
+ * File: regScanner.h
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the Scanner
+ */
+#ifndef REGSCANNER_H
+#define REGSCANNER_H
 #include <iostream>
 #include <string>
 #include <utility>

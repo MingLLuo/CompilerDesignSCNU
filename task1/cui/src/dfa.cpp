@@ -1,8 +1,16 @@
+/*
+ * File: dfa.cpp
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the DFA class
+ */
 #include "dfa.h"
 
+/* DFAState: constructor */
 DFAState::DFAState(std::set<std::shared_ptr<NFAState>> nfa_states)
     : nfa_states(std::move(nfa_states)), id(fresh()), is_final(false) {}
 
+/* DFAState: print the state */
 void DFAState::printDFAState() const {
     if (is_final)
         std::cout << "Final Status: \\" << final_status << "\\\n";
@@ -17,6 +25,7 @@ void DFAState::printDFAState() const {
     std::cout << "}\n";
 }
 
+/* DFAState: print the transitions */
 void DFAState::printTransitions() const {
     for (const auto &transition : transitions) {
         std::cout << "  Input " << transition.first << " ";
@@ -58,6 +67,7 @@ epsilonClosure(const std::set<std::shared_ptr<NFAState>> &states) {
     return closure;
 }
 
+/* move: move the states with input symbol */
 std::set<std::shared_ptr<NFAState>>
 move(const std::set<std::shared_ptr<NFAState>> &states, char inputSymbol) {
     std::set<std::shared_ptr<NFAState>> result;
@@ -75,11 +85,13 @@ move(const std::set<std::shared_ptr<NFAState>> &states, char inputSymbol) {
     return result;
 }
 
+/* createDFAState: create a new DFA state */
 std::shared_ptr<DFAState>
 createDFAState(const std::set<std::shared_ptr<NFAState>> &nfaStates) {
     return std::make_shared<DFAState>(nfaStates);
 }
 
+/* convertToDFA: convert NFA to DFA */
 std::shared_ptr<DFA> convertToDFA(const std::shared_ptr<NFA> &nfa) {
     flush();
     // Subset Construction Algorithm
@@ -172,6 +184,7 @@ std::shared_ptr<DFA> convertToDFA(const std::shared_ptr<NFA> &nfa) {
     return dfa;
 }
 
+/* printDFA: print the DFA */
 void DFA::printDFA() const {
     std::cout << "Start ";
     start_state->printDFAState();
@@ -199,6 +212,7 @@ void DFA::printDFA() const {
     }
 }
 
+/* acceptString: check if the string is accepted by the DFA */
 void DFA::acceptString(const std::string &str) const {
     std::shared_ptr<DFAState> currentState = start_state;
     for (const auto symbol : str) {
@@ -223,18 +237,20 @@ void DFA::acceptString(const std::string &str) const {
     }
 }
 
+/* setFinalStatus: set final status for all final states */
 void DFA::setFinalStatus(const std::string &str) const {
     for (auto &state : dfa_states) {
         state->final_status = str;
     }
 }
 
+/* printStatus: print the status of the DFA */
 void DFA::printStatus() const {
     std::cout << "count of DFA states: " << dfa_states.size() << "\n";
     std::cout << "count of symbols: " << symbols.size() << "\n";
 }
 
-// Function to minimize the DFA
+/* minimizeDFA: minimize the DFA */
 std::shared_ptr<DFA> DFA::minimizeDFA() {
     std::unordered_map<std::shared_ptr<DFAState>, int> state_to_partition;
     std::unordered_map<int, std::unordered_set<std::shared_ptr<DFAState>>>
@@ -257,12 +273,6 @@ std::shared_ptr<DFA> DFA::minimizeDFA() {
             partition_map[state_to_partition[state]].insert(state);
         }
     }
-    // int current_partition = 2;
-    // // Partition the states into final and non-final states
-    // for (const auto &state : this->dfa_states) {
-    //     state_to_partition[state] = (state->is_final) ? 1 : 0;
-    //     partition_map[state_to_partition[state]].insert(state);
-    // }
     bool changed = true;
     while (changed) {
         changed = false;
