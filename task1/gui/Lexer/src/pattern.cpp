@@ -1,3 +1,9 @@
+/*
+ * File: pattern.cpp
+ * Project: Lexer
+ * Author: MingLLuo
+ * Usage: Define the Pattern class
+ */
 #include "pattern.h"
 #include <string>
 
