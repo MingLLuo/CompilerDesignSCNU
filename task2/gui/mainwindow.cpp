@@ -190,23 +190,23 @@ void displaySLR1Table(SLR1Parser &parser, QTableView *tableView) {
 
 void MainWindow::on_getSLR1_clicked() {
   QString text = ui->textEdit->toPlainText();
+  QString output;
   SLR1Parser slr1(text.toStdString(), "");
   auto i = slr1.checkValid();
   ui->textBrowser->clear();
   ui->table->clearSpans();
   if (i != 0) {
+    output = "error: ";
     if (i == 1) {
-      ui->textBrowser->setPlainText(
-          QString::fromStdString("reduction and moveIn error"));
+      output += "reduction and moveIn error\n";
     } else {
-      ui->textBrowser->setPlainText(
-          QString::fromStdString("reduction collison"));
+      output += "reduction collison\n";
     }
-    return;
   }
   displaySLR1Table(slr1, ui->table);
-  ui->textBrowser->setPlainText(QString::fromStdString(
-      slr1.g.followSetsStr() + '\n' + slr1.itemSetsStr()));
+  output += QString::fromStdString(slr1.g.followSetsStr() + '\n' +
+                                    slr1.itemSetsStr());
+  ui->textBrowser->setPlainText(output);
 }
 
 void MainWindow::on_parser_clicked()

@@ -1,0 +1,98 @@
+Token: comment
+Token: comment
+Token: int
+Token: id -> number
+Token: ;
+Token: double
+Token: id -> result
+Token: ;
+Token: comment
+Token: int
+Token: id -> factorial
+Token: (
+Token: int
+Token: id -> n
+Token: )
+Token: {
+Token: int
+Token: id -> result
+Token: ;
+Token: id -> result
+Token: =
+Token: num -> 1
+Token: ;
+Token: do
+Token: {
+Token: id -> result
+Token: =
+Token: id -> result
+Token: *
+Token: id -> n
+Token: ;
+Token: id -> n
+Token: =
+Token: id -> n
+Token: -
+Token: num -> 1
+Token: ;
+Token: }
+Token: while
+Token: (
+Token: id -> n
+Token: >
+Token: num -> 1
+Token: )
+Token: ;
+Token: return
+Token: id -> result
+Token: ;
+Token: }
+Token: comment
+Token: int
+Token: id -> main
+Token: (
+Token: void
+Token: )
+Token: {
+Token: id -> number
+Token: =
+Token: num -> 5
+Token: ;
+Token: id -> result
+Token: =
+Token: id -> factorial
+Token: (
+Token: id -> number
+Token: )
+Token: ;
+Token: comment
+Token: if
+Token: (
+Token: id -> result
+Token: >
+Token: num -> 100
+Token: )
+Token: {
+Token: return
+Token: num -> 1
+Token: ;
+Token: }
+Token: else
+Token: if
+Token: (
+Token: id -> result
+Token: <
+Token: num -> 50
+Token: )
+Token: {
+Token: return
+Token: num -> 2
+Token: ;
+Token: }
+Token: else
+Token: {
+Token: return
+Token: num -> 0
+Token: ;
+Token: }
+Token: }

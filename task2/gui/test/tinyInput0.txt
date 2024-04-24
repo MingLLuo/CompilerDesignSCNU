@@ -1,0 +1,36 @@
+Token: comment
+Token: read
+Token: id -> x
+Token: ;
+Token: comment
+Token: if
+Token: num -> 0
+Token: <
+Token: id -> x
+Token: then
+Token: comment
+Token: id -> fact
+Token: :=
+Token: num -> 1
+Token: ;
+Token: repeat
+Token: id -> fact
+Token: :=
+Token: id -> fact
+Token: *
+Token: id -> x
+Token: ;
+Token: id -> x
+Token: :=
+Token: id -> x
+Token: -
+Token: num -> 1
+Token: until
+Token: id -> x
+Token: =
+Token: num -> 0
+Token: ;
+Token: write
+Token: id -> fact
+Token: comment
+Token: end
