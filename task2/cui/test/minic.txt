@@ -7,14 +7,14 @@ number: dd*(.dd*)?
 rules:
 program-> definition-list
 definition-list-> definition-list definition | definition
-definition-> variable-definition | function-definition
-variable-definition-> type-indicator identifier ;|type-indicator identifier [ number ] ;
-type-indicator-> int | float | double|void
+definition-> function-definition | variable-definition
 function-definition-> type-indicator identifier ( parameters ) compound-stmt
+variable-definition-> type-indicator identifier ;|type-indicator identifier [ number ] ;
+type-indicator->int|float|double|void
 parameters->parameter-list | void
 parameter-list->parameter-list , parameter | parameter
 parameter-> type-indicator identifier | type-indicator identifier [ ]
-compound-stmt-> { local-definitions statement-list }
+compound-stmt-> { local-definitions statement-list } |  { statement-list } | { local-definition } | { }
 local-definitions-> local-definitions variable-definition | variable-definition
 statement-list-> statement-list statement | statement
 statement->expression-stmt | compound-stmt | condition-stmt|dowhile-stmt | return-stmt

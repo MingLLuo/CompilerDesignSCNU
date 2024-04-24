@@ -224,7 +224,6 @@ void MainWindow::on_parser_clicked()
             ui->textBrowser->setPlainText(
                 QString::fromStdString("reduction collison"));
         }
-        return;
     }
     displaySLR1Table(slr1, ui->table);
     ui->textBrowser->setPlainText(QString::fromStdString(
