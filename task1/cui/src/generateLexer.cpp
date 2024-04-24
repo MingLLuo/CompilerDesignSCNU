@@ -184,7 +184,13 @@ std::string generateLexer(const Lexer &lexer) {
     code << "               tokens.push_back(token);\n";
     code << "               token.clear();\n";
     code << "           }\n";
-    code << "           tokens.push_back(std::string(1, c));\n";
+    code << "          std::string tmp = std::string(1, c);\n";
+    code << "          while (i + 1 < total.size() && !isspace(total[i + 1])) "
+            "{\n";
+    code << "              i++;\n";
+    code << "              tmp += total[i];\n";
+    code << "          }\n";
+    code << "          tokens.push_back(tmp);\n";
     code << "       } else {\n";
     code << "           token += c;\n";
     code << "       }\n";
@@ -232,7 +238,13 @@ std::string generateLexer(const Lexer &lexer) {
     code << "               tokens.push_back(token);\n";
     code << "               token.clear();\n";
     code << "           }\n";
-    code << "           tokens.push_back(std::string(1, c));\n";
+    code << "          std::string tmp = std::string(1, c);\n";
+    code << "          while (i + 1 < total.size() && !isspace(total[i + 1])) "
+            "{\n";
+    code << "              i++;\n";
+    code << "              tmp += total[i];\n";
+    code << "          }\n";
+    code << "          tokens.push_back(tmp);\n";
     code << "       } else {\n";
     code << "           token += c;\n";
     code << "     };\n";
