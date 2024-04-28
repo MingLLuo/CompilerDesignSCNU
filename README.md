@@ -1,3 +1,18 @@
+Chinese:
+- 华南师范大学计算机学院2021级编译原理项目源代码仓库
+- Task1: 词法分析器生成器
+  - 生成NFA/DFA
+  - 生成词法分析器
+  - 生成Token化文本(单词编码), 供Task2使用
+- Task2: 语法分析器生成器
+  - 生成LR0/SLR1分析器
+  - 读取Token化文本, 生成语法树
+- 源代码使用C++编写, GUI使用Qt6编写, 使用CMake构建
+- 请使用C++17标准编译Lexer.cpp(由Task1中的CodeGen生成), 例如`g++ --std=c++17 lexer.cpp`
+
+---
+
+English:
 - need more "clarify"
 - also need more documentation
 - many there are base English, only in GUI setting will show some Chinese
