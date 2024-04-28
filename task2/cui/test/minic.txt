@@ -14,7 +14,7 @@ type-indicator->int|float|double|void
 parameters->parameter-list | void
 parameter-list->parameter-list , parameter | parameter
 parameter-> type-indicator identifier | type-indicator identifier [ ]
-compound-stmt-> { local-definitions statement-list } |  { statement-list } | { local-definition } | { }
+compound-stmt-> { local-definitions statement-list } |  { statement-list } 
 local-definitions-> local-definitions variable-definition | variable-definition
 statement-list-> statement-list statement | statement
 statement->expression-stmt | compound-stmt | condition-stmt|dowhile-stmt | return-stmt
