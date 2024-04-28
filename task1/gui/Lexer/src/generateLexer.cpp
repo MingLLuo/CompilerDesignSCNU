@@ -127,6 +127,16 @@ std::string generateLexer(const Lexer &lexer) {
   code << "    return 1;\n";
   code << "}\n\n";
 
+  code << "bool isSingleCharSymbol(char c) {\n";
+  code << "    return ";
+  for (const auto &symbol : lexer.pattern.specialSymbols) {
+    if (symbol.first.size() == 1) {
+      code << "c == '" << symbol.first << "' || ";
+    }
+  }
+  code << "false;\n";
+  code << "}\n\n";
+
   code << "int main() {\n";
   code << "    std::ifstream file(\"../input.txt\");\n";
   code << "    std::string input, total;\n";
@@ -239,8 +249,7 @@ std::string generateLexer(const Lexer &lexer) {
     code << "               token.clear();\n";
     code << "           }\n";
     code << "          std::string tmp = std::string(1, c);\n";
-    code << "          while (i + 1 < total.size() && !isspace(total[i + 1])) "
-            "{\n";
+    code << "          while (i + 1 < total.size() && !isspace(total[i + 1]) && !isSingleCharSymbol(total[i + 1]) && !isalnum(total[i + 1])) {\n";
     code << "              i++;\n";
     code << "              tmp += total[i];\n";
     code << "          }\n";
