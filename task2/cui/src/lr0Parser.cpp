@@ -363,3 +363,59 @@ std::string LR0Parser::treeNodePrint(std::shared_ptr<TreeNode> root, int depth,
 
   return ss.str();
 }
+
+// GPU MODE!!! (beta)
+// std::string LR0Parser::treeNodePrint(std::shared_ptr<TreeNode> root, int depth,
+//                                      std::string prefix) {
+//   std::stringstream ss;
+//   if (root == nullptr) {
+//     return "";
+//   }
+
+//   if (!g.isNonTerminal(root->value)) {
+//     // only print the value
+//     // prefix += "|- ";
+//     auto nextValue = this->g.pattern.isKeyword(root->value)
+//                          ? "<" + root->value + ">"
+//                          : root->value;
+//     ss << prefix << nextValue << std::endl;
+//   } else {
+//     // first op
+//     int op_flag = -1;
+//     for (int i = 0; i < root->children.size(); i++) {
+//       if (root->children[i]->value.find("op") != std::string::npos) {
+//         op_flag = i;
+//         break;
+//       }
+//     }
+
+//     auto child0 = root->children[0];
+//     if (root->value.find("stmt") != std::string::npos &&
+//         this->g.pattern.isKeyword(child0->value)) {
+//       // give indent for i = 1 to end
+//       ss << treeNodePrint(child0, 0, prefix);
+//       prefix += "| ";
+
+//       if (op_flag != -1) {
+//         ss << treeNodePrint(root->children[op_flag], 0, prefix + " ");
+//         prefix += " ..";
+//       }
+//     } else {
+//       // give indent for i = 0 to end
+//       if (op_flag != -1) {
+//         ss << treeNodePrint(root->children[op_flag], 0, prefix + " ");
+//         prefix += " ..";
+//       }
+//       ss << treeNodePrint(child0, 0, prefix);
+//     }
+
+//     for (int i = 1; i < root->children.size(); i++) {
+//       if (i == op_flag) {
+//         continue;
+//       }
+//       ss << treeNodePrint(root->children[i], 0, prefix);
+//     }
+//   }
+
+//   return ss.str();
+// }
