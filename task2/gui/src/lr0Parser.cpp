@@ -364,6 +364,67 @@ std::string LR0Parser::treeNodePrint(std::shared_ptr<TreeNode> root, int depth,
   return ss.str();
 }
 
+
+void LR0Parser::generatePseudoCode(std::shared_ptr<TreeNode> &node,
+                                   std::vector<std::string> &codeList,
+                                   int &tempVarCounter, int indentLevel) {
+  if (!node)
+    return;
+
+  std::string currentLine;
+  std::vector<std::string> childResults;
+  if (node->children.size() == 1) {
+    node = node->children[0];
+  }
+  if (!node->children.empty()) {
+    // Add indent
+    std::string tempVar = "t" + std::to_string(tempVarCounter++);
+    currentLine = std::string((indentLevel > 1? (indentLevel * 2) : 2), ' ') + tempVar + "(" + node->value + "):= ";
+    codeList.push_back(currentLine);
+    int flag = codeList.size() - 1;
+
+    // Now output the current node's assignment to its parent
+    if (indentLevel == 0) {
+      codeList.push_back(node->value + " = " + tempVar);
+    } else {
+      codeList.push_back(std::string((indentLevel - 1) * 2, ' ') + node->value +
+                         " = " + tempVar);
+    }
+      for (auto &child : node->children) {
+          if (child->children.empty()) {
+              childResults.push_back(child->value);
+          } else {
+              tempVar = "t" + std::to_string(tempVarCounter++);
+              generatePseudoCode(child, codeList, tempVarCounter, indentLevel + 1);
+              childResults.push_back(tempVar);
+          }
+      }
+      for (size_t i = 0; i < childResults.size(); ++i) {
+          currentLine += childResults[i];
+          if (i != childResults.size() - 1) {
+              currentLine += " ";
+          }
+      }
+      codeList[flag] = codeList[flag+1];
+      codeList[flag + 1] = currentLine;
+  }
+}
+
+std::string
+LR0Parser::generatePseudoCodeWrapper(std::shared_ptr<TreeNode> root) {
+  std::vector<std::string> codeList;
+  int tempVarCounter = 1;
+  int indentLevel = 0;
+
+  generatePseudoCode(root, codeList, tempVarCounter, indentLevel);
+
+  std::stringstream ss;
+  for (const auto &line : codeList) {
+    ss << line << std::endl;
+  }
+  return ss.str();
+}
+
 // std::string LR0Parser::treeNodePrint(std::shared_ptr<TreeNode> root, int depth,
 //                                      std::string prefix) {
 //   std::stringstream ss;

@@ -26,5 +26,10 @@ int main() {
     input.push_back(line);
   }
   auto root = slr1Parser.parse(input);
-  std::cout << slr1Parser.treeNodePrint(root, 0, "") << std::endl;
+  // std::cout << slr1Parser.treeNodePrint(root, 0, "") << std::endl;
+
+  if (root) {
+    auto code = slr1Parser.generatePseudoCodeWrapper(root);
+    std::cout << "Generated PseudoCode:\n" << code << std::endl;
+  }
 }

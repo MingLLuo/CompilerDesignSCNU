@@ -122,6 +122,11 @@ public:
   ItemSet gotoSet(ItemSet &s, std::string symbol);
 
   std::shared_ptr<TreeNode> parse(std::vector<std::string> tokens);
+  
+  void generatePseudoCode(std::shared_ptr<TreeNode> &node,
+                          std::vector<std::string> &codeList,
+                          int &tempVarCounter, int indentLevel);
+  std::string generatePseudoCodeWrapper(std::shared_ptr<TreeNode> root);
 
   virtual void printItemSets();
   Token stringToToken(std::string tokenStr);
